@@ -70,7 +70,11 @@ func listen(addr net.Addr) (net.Listener, error) {
 
 	switch a := addr.(type) {
 	case *vsock.Addr:
-		ln, err = vsock.ListenContextID(a.ContextID, a.Port, nil)
+		if a.ContextID == 0 {
+			ln, err = vsock.Listen(a.Port, nil)
+		} else {
+			ln, err = vsock.ListenContextID(a.ContextID, a.Port, nil)
+		}
 	case *net.TCPAddr:
 		ln, err = net.ListenTCP(a.Network(), a)
 	}
