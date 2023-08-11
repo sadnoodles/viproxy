@@ -7,8 +7,8 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/brave/viproxy"
 	"github.com/mdlayher/vsock"
+	"github.com/sadnoodles/viproxy"
 )
 
 func parseAddr(rawAddr string) net.Addr {

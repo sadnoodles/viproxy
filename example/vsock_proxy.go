@@ -15,9 +15,9 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/brave/viproxy"
 	"github.com/kardianos/service"
 	"github.com/mdlayher/vsock"
+	"github.com/sadnoodles/viproxy"
 	"github.com/spf13/viper"
 )
 

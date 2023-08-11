@@ -1,4 +1,4 @@
-module github.com/brave/viproxy
+module github.com/sadnoodles/viproxy
 
 go 1.20
 
