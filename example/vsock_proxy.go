@@ -58,7 +58,7 @@ func parseAddr(rawAddr string) net.Addr {
 	return addr
 }
 
-func (proxy *VsockProxyConfig) Start(ctx context.Context, logger log.Logger) error {
+func (proxy *VsockProxyConfig) Start(ctx context.Context, logger service.Logger) error {
 
 	// E.g.: VSOCK_INADDRS=127.0.0.1:8080,127.0.0.1:8081 VSOCK_OUTADDRS=4:8080,4:8081 go run main.go
 	inEnv, outEnv := proxy.InAddrs, proxy.OutAddrs
@@ -92,7 +92,7 @@ type Program struct {
 	cancel context.CancelFunc
 }
 
-func NewProgram() (*Program, error) {
+func NewProgram(saveconf bool) (*Program, error) {
 	viper.SetConfigName("vsock_proxy_config")
 	viper.SetConfigType("json")
 	if binfile, err := os.Executable(); err == nil {
@@ -113,7 +113,7 @@ func NewProgram() (*Program, error) {
 		return nil, err
 	}
 
-	if viper.ConfigFileUsed() == "" {
+	if viper.ConfigFileUsed() == "" && saveconf {
 		// 配置从环境变量种加载时
 		viper.SafeWriteConfig()
 	} else {
@@ -194,7 +194,9 @@ func main() {
 		},
 	}
 
-	prg, err := NewProgram()
+	saveconf := (*action != "")
+	// 非服务模式不保存配置文件
+	prg, err := NewProgram(saveconf)
 	if err != nil {
 		log.Fatal(err)
 	}
